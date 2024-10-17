@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 # Set your OpenAI API key
-openai.api_key = "sk-5xxwqXgKUhZOkTfPXUMw_KrgoecbbPVlDjDaSYzeWyT3BlbkFJogs4WniBbj5kM0eTlxZNuCaxPUXhHoAQFoheL1QEgA"
+openai.api_key = ""
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yoursecretkey'
