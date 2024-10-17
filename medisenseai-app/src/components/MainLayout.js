@@ -1,15 +1,20 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './Header';
+import Portal from './Portal';
+
+// Imported Pages
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import SymptomCheck from '../pages/SymptomCheck';
 import SymptomLogs from '../pages/SymptomLogs';
+import Dashboard from '../pages/Dashboard' ;
+
 
 const MainLayout = () => {
     const location = useLocation();
 
-    const hideHeader = location.pathname === '/login' || location.pathname === '/register';
+    const hideHeader = location.pathname === '/login' || location.pathname === '/register'  || location.pathname=== '/portal'  || location.pathname.startsWith === '/portal';
 
     return (
         <>
@@ -18,8 +23,13 @@ const MainLayout = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/symptom-check" element={<SymptomCheck />} />
-                <Route path="/logs" element={<SymptomLogs />} />
+                {/* <Route path="/symptom-check" element={<SymptomCheck />} />
+                <Route path="/logs" element={<SymptomLogs />} /> */}
+                <Route path="/portal/*" element={<Portal />}> {/* Handles the main portal layout */}
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="symptom-logs" element={<SymptomLogs />} />
+                    <Route path="symptom-check" element={<SymptomCheck />} />
+                </Route>
             </Routes>
         </>
     );
