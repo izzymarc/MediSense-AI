@@ -98,7 +98,7 @@ const Dashboard = () => {
             </div>
 
             {/* Symptom Tracker Pie Chart */}
-            <div className="bg-white shadow-lg rounded p-6 mb-8" style={{ width: '100%', height: '550px' }}>
+            <div className="flex items-center justify-center bg-white shadow-lg rounded p-6 mb-8" style={{ width: '90%', height: '550px' }}>
                 <h3 className="text-2xl font-semibold text-cyan-700 mb-4">Symptom Tracker</h3>
                 <Pie ref={pieChartRef} data={pieChartData} options={{
                     responsive: true,
