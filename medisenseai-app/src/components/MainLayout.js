@@ -14,7 +14,7 @@ import Dashboard from '../pages/Dashboard' ;
 const MainLayout = () => {
     const location = useLocation();
 
-    const hideHeader = location.pathname === '/login' || location.pathname === '/register'  || location.pathname=== '/portal'  || location.pathname.startsWith === '/portal';
+    const hideHeader = location.pathname === '/login' || location.pathname === '/register'  || location.pathname=== '/portal'  ||  location.pathname === '/portal/symptom-check'  ||  location.pathname.startsWith === '/portal';
 
     return (
         <>
