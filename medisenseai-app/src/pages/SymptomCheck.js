@@ -3,24 +3,37 @@ import React, { useState } from 'react';
 const SymptomCheck = () => {
     const [symptomInput, setSymptomInput] = useState('');
     const [diagnosisResult, setDiagnosisResult] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // API call to get the diagnosis result
-        const response = await fetch('/check-symptoms', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ symptoms: symptomInput }),
-        });
-        const data = await response.json();
-        setDiagnosisResult(data.advice || 'Could not fetch diagnosis. Please try again.');
+        setError(''); // Reset error state before making the request
+        setDiagnosisResult(''); // Clear previous results
+
+        try {
+            const response = await fetch('/check-symptoms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ symptoms: symptomInput }),
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                setError(data.error);
+            } else {
+                setDiagnosisResult(data.advice || 'No diagnosis could be made. Please try again.');
+            }
+        } catch (error) {
+            setError('An error occurred while fetching the diagnosis. Please try again later.');
+        }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-full bg-gray-100 px-4">
-            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl ml-12">
+        <div className="flex flex-col items-center justify-center h-full px-4">
+            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
                 <h2 className="text-2xl font-bold mb-4 text-center">
                     Hello Ezekiel! What would you like to find out today?
                 </h2>
@@ -30,6 +43,13 @@ const SymptomCheck = () => {
                     <div className="bg-cyan-100 text-cyan-800 p-4 mb-4 rounded-md shadow-inner">
                         <h3 className="font-semibold mb-2">Possible Diagnosis:</h3>
                         <p>{diagnosisResult}</p>
+                    </div>
+                )}
+
+                {/* Error Message */}
+                {error && (
+                    <div className="bg-red-100 text-red-800 p-4 mb-4 rounded-md shadow-inner">
+                        <p>{error}</p>
                     </div>
                 )}
 
