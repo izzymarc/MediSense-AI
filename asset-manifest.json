@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/MediSense-AI/static/css/main.164d5fc4.css",
-    "main.js": "/MediSense-AI/static/js/main.cab9f876.js",
+    "main.css": "/MediSense-AI/static/css/main.b8fc46b6.css",
+    "main.js": "/MediSense-AI/static/js/main.82d06b7a.js",
     "index.html": "/MediSense-AI/index.html",
-    "main.164d5fc4.css.map": "/MediSense-AI/static/css/main.164d5fc4.css.map",
-    "main.cab9f876.js.map": "/MediSense-AI/static/js/main.cab9f876.js.map"
+    "main.b8fc46b6.css.map": "/MediSense-AI/static/css/main.b8fc46b6.css.map",
+    "main.82d06b7a.js.map": "/MediSense-AI/static/js/main.82d06b7a.js.map"
   },
   "entrypoints": [
-    "static/css/main.164d5fc4.css",
-    "static/js/main.cab9f876.js"
+    "static/css/main.b8fc46b6.css",
+    "static/js/main.82d06b7a.js"
   ]
 }
