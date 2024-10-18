@@ -1,19 +1,19 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for
-import openai
+from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 from datetime import datetime
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Set your OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_KEY")
-
+# Initialize Flask app
 app = Flask(__name__)
+CORS(app)
+
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # MongoDB connection
@@ -27,10 +27,17 @@ login_manager.login_view = 'login'
 
 # MongoDB User Model using Flask-Login
 class User(UserMixin):
-    def __init__(self, id, email, password):
+    def __init__(self, id, first_name, last_name, email, password, date_of_birth, gender, contact_number=None, medical_history=None, allergies=None):
         self.id = id
+        self.first_name = first_name
+        self.last_name = last_name
         self.email = email
         self.password = password
+        self.date_of_birth = date_of_birth
+        self.gender = gender
+        self.contact_number = contact_number
+        self.medical_history = medical_history
+        self.allergies = allergies
 
     @staticmethod
     def get_by_email(email):
@@ -44,43 +51,79 @@ class User(UserMixin):
 def load_user(user_id):
     user_data = User.get_by_id(user_id)
     if user_data:
-        return User(str(user_data['_id']), user_data['email'], user_data['password'])
+        return User(
+            str(user_data['_id']),
+            user_data['first_name'],
+            user_data['last_name'],
+            user_data['email'],
+            user_data['password'],
+            user_data['date_of_birth'],
+            user_data['gender'],
+            user_data['contact_number'],
+            user_data['medical_history'],
+            user_data['allergies']
+        )
     return None
 
 # Registration route
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['POST'])
 def register():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        hashed_password = generate_password_hash(password, method='sha256')
+    data = request.get_json()
+    first_name = data.get('firstName')
+    last_name = data.get('lastName')
+    email = data.get('email')
+    password = data.get('password')
+    date_of_birth = data.get('dateOfBirth')
+    gender = data.get('gender')
+    contact_number = data.get('contactNumber', None)
+    medical_history = data.get('medicalHistory', None)
+    allergies = data.get('allergies', None)
 
-        # Check if user exists
-        if User.get_by_email(email):
-            return 'Email already registered.'
+    hashed_password = generate_password_hash(password, method='sha256')
 
-        # Insert user into MongoDB
-        db.users.insert_one({'email': email, 'password': hashed_password})
-        return 'Registration successful! Please log in.'
+    # Check if user exists
+    if User.get_by_email(email):
+        return jsonify({"error": "Email already registered."}), 400
 
-    return render_template('register.html')
+    # Insert user into MongoDB
+    db.users.insert_one({
+        'first_name': first_name,
+        'last_name': last_name,
+        'email': email,
+        'password': hashed_password,
+        'date_of_birth': date_of_birth,
+        'gender': gender,
+        'contact_number': contact_number,
+        'medical_history': medical_history,
+        'allergies': allergies
+    })
+    return jsonify({"message": "Registration successful!"}), 200
 
 # Login route
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
-        user_data = User.get_by_email(email)
-        if not user_data or not check_password_hash(user_data['password'], password):
-            return 'Invalid credentials. Please try again.'
+    user_data = User.get_by_email(email)
+    if not user_data or not check_password_hash(user_data['password'], password):
+        return jsonify({"error": "Invalid credentials."}), 400
 
-        user = User(str(user_data['_id']), user_data['email'], user_data['password'])
-        login_user(user)
-        return redirect(url_for('home'))
-
-    return render_template('login.html')
+    user = User(
+        str(user_data['_id']),
+        user_data['first_name'],
+        user_data['last_name'],
+        user_data['email'],
+        user_data['password'],
+        user_data['date_of_birth'],
+        user_data['gender'],
+        user_data['contact_number'],
+        user_data['medical_history'],
+        user_data['allergies']
+    )
+    login_user(user)
+    return jsonify({"message": "Login successful!"}), 200
 
 # Logout route
 @app.route('/logout')
@@ -97,7 +140,6 @@ def check_symptoms():
     symptoms = data.get('symptoms')
 
     try:
-        # Using the new ChatCompletion method
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
