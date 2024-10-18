@@ -136,7 +136,7 @@ def logout():
 @app.route('/check-symptoms', methods=['POST'])
 @login_required
 def check_symptoms():
-    data = request.form
+    data = request.get_json()
     symptoms = data.get('symptoms')
 
     try:
