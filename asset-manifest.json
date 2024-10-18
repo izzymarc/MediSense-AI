@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/MediSense-AI/static/css/main.164d5fc4.css",
+    "main.js": "/MediSense-AI/static/js/main.cab9f876.js",
+    "index.html": "/MediSense-AI/index.html",
+    "main.164d5fc4.css.map": "/MediSense-AI/static/css/main.164d5fc4.css.map",
+    "main.cab9f876.js.map": "/MediSense-AI/static/js/main.cab9f876.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.164d5fc4.css",
+    "static/js/main.cab9f876.js"
+  ]
+}
