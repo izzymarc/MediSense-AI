@@ -25,7 +25,8 @@ const MainLayout = () => {
                 <Route path="/register" element={<Register />} />
                 {/* <Route path="/symptom-check" element={<SymptomCheck />} />
                 <Route path="/logs" element={<SymptomLogs />} /> */}
-                <Route path="/portal/*" element={<Portal />}> {/* Handles the main portal layout */}
+                <Route path="/portal/*" element={<Portal />}>
+                    <Route index element={<Dashboard />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="symptom-logs" element={<SymptomLogs />} />
                     <Route path="symptom-check" element={<SymptomCheck />} />

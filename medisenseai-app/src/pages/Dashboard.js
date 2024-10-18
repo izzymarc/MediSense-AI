@@ -1,22 +1,42 @@
 import React, { useEffect, useRef } from 'react';
-import { Bar, Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
+import { Line, Pie } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+} from 'chart.js';
 
 // Register the necessary chart components
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement 
+);
+
 
 const Dashboard = () => {
-    const barChartRef = useRef(null);
+    const lineChartRef = useRef(null);
     const pieChartRef = useRef(null);
 
     // Clean up the chart instances on component unmount
     useEffect(() => {
-        const barChartInstance = barChartRef.current;
+        const lineChartInstance = lineChartRef.current;
         const pieChartInstance = pieChartRef.current;
 
         return () => {
-            if (barChartInstance) {
-                barChartInstance.destroy();
+            if (lineChartInstance) {
+                lineChartInstance.destroy();
             }
             if (pieChartInstance) {
                 pieChartInstance.destroy();
@@ -24,22 +44,22 @@ const Dashboard = () => {
         };
     }, []);
 
-    const barChartData = {
-        labels: ['Symptom A', 'Symptom B', 'Symptom C', 'Symptom D', 'Symptom E'],
+    const lineChartData = {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
         datasets: [
             {
                 label: 'Symptom Frequency',
                 data: [12, 19, 8, 15, 10],
-                backgroundColor: 'rgba(0, 188, 212, 0.6)',
+                fill: false,
                 borderColor: 'rgba(0, 188, 212, 1)',
-                borderWidth: 1,
+                tension: 0.1,
             },
             {
                 label: 'Improvement Rate',
                 data: [8, 12, 6, 10, 7],
-                backgroundColor: 'rgba(0, 150, 136, 0.6)',
+                fill: false,
                 borderColor: 'rgba(0, 150, 136, 1)',
-                borderWidth: 1,
+                tension: 0.1,
             },
         ],
     };
@@ -78,7 +98,7 @@ const Dashboard = () => {
             </div>
 
             {/* Symptom Tracker Pie Chart */}
-            <div className="bg-white shadow-lg rounded p-6 mb-8">
+            <div className="bg-white shadow-lg rounded p-2 mb-8" style={{ width: '100%', height: '550px' }}>
                 <h3 className="text-2xl font-semibold text-cyan-700 mb-4">Symptom Tracker</h3>
                 <Pie ref={pieChartRef} data={pieChartData} options={{
                     responsive: true,
@@ -94,21 +114,25 @@ const Dashboard = () => {
                 }} />
             </div>
 
-            {/* Symptom Insights Bar Chart */}
+            {/* Health Insights Line Chart */}
             <div className="bg-white shadow-lg rounded-lg p-6">
-                <h3 className="text-2xl font-semibold text-cyan-700 mb-4">Symptom Insights</h3>
-                <Bar ref={barChartRef} data={barChartData} options={{
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
+                <h3 className="text-2xl font-semibold text-cyan-700 mb-4">Health Insights</h3>
+                <Line
+                    ref={lineChartRef}
+                    data={lineChartData}
+                    options={{
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Frequency of Symptoms vs Improvement Rate',
+                            },
                         },
-                        title: {
-                            display: true,
-                            text: 'Frequency of Symptoms vs Improvement Rate',
-                        },
-                    },
-                }} />
+                    }}
+                />
             </div>
         </div>
     );

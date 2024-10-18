@@ -35,7 +35,7 @@ const SymptomCheck = () => {
         <div className="flex flex-col items-center justify-center h-full px-4">
             <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
                 <h2 className="text-2xl font-bold mb-4 text-center">
-                    Hello Ezekiel! What would you like to find out today?
+                    What would you like to find out today?
                 </h2>
 
                 {/* Diagnosis Result */}
