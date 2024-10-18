@@ -4,17 +4,11 @@ import TopNav from './TopNav';
 
 const Portal = () => {
     return (
-        <div className="flex h-screen">
-            {/* Fixed Sidebar */}
+        <div className="flex h-screen overflow-hidden">
             <SideNav />
-
-            {/* Main Content */}
-            <div className="flex-grow flex flex-col overflow-y-auto">
-                {/* Top Navigation */}
+            <div className="flex flex-col flex-grow h-full">
                 <TopNav />
-
-                {/* Page Content */}
-                <div className="flex-grow p-4 overflow-y-auto">
+                <div className="flex-grow overflow-auto p-4">
                     <Outlet /> {/* Specific page content based on the route */}
                 </div>
             </div>
