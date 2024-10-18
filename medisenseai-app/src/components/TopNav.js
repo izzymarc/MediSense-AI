@@ -20,7 +20,7 @@ const TopNav = () => {
 
     return (
         <div className="bg-white shadow-md p-4 flex justify-between items-center">
-            <h1 className="text-xl font-bold">MediSense AI</h1>
+            <h3 className="text-3xl font-bold mb-4 text-cyan-800">Welcome back Ezekiel!</h3>
             <div className="relative">
                 <button onClick={toggleDropdown} className="focus:outline-none">
                     <FaUserCircle size={30} />
