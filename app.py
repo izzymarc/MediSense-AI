@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 import os
 from datetime import datetime
+import openai
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,6 +16,7 @@ app = Flask(__name__)
 CORS(app)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 # MongoDB connection
 client = MongoClient(os.getenv('MONGO_URI'))
@@ -65,6 +67,12 @@ def load_user(user_id):
         )
     return None
 
+# Test MongoDB Connection
+print("Testing MongoDB connection...")
+users = db.users.find()
+for user in users:
+    print(user)
+
 # Registration route
 @app.route('/register', methods=['POST'])
 def register():
@@ -79,7 +87,7 @@ def register():
     medical_history = data.get('medicalHistory', None)
     allergies = data.get('allergies', None)
 
-    hashed_password = generate_password_hash(password, method='sha256')
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
 
     # Check if user exists
     if User.get_by_email(email):
@@ -97,7 +105,7 @@ def register():
         'medical_history': medical_history,
         'allergies': allergies
     })
-    return jsonify({"message": "Registration successful!"}), 200
+    return jsonify({"message": "Registration successful!", "success": True}), 200
 
 # Login route
 @app.route('/login', methods=['POST'])
@@ -106,8 +114,18 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
+    print("Login attempt for email:", email)
+
     user_data = User.get_by_email(email)
-    if not user_data or not check_password_hash(user_data['password'], password):
+    if not user_data:
+        print("No user found with email:", email)
+        return jsonify({"error": "Invalid credentials."}), 400
+
+    print("User found:", user_data)
+
+    # Check if the password matches
+    if not check_password_hash(user_data['password'], password):
+        print("Password does not match for user:", email)
         return jsonify({"error": "Invalid credentials."}), 400
 
     user = User(
@@ -123,14 +141,15 @@ def login():
         user_data['allergies']
     )
     login_user(user)
-    return jsonify({"message": "Login successful!"}), 200
+    print("Login successful for user:", email)
+    return jsonify({"message": "Login successful!", "success": True}), 200
 
 # Logout route
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return 'Logged out successfully!'
+    return jsonify({"message": "Logged out successfully!", "success": True}), 200
 
 # Symptom Checker API using ChatCompletion
 @app.route('/check-symptoms', methods=['POST'])
@@ -138,6 +157,9 @@ def logout():
 def check_symptoms():
     data = request.get_json()
     symptoms = data.get('symptoms')
+
+    if not symptoms:
+        return jsonify({"error": "Symptoms are required."}), 400
 
     try:
         response = openai.ChatCompletion.create(
