@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const TopNav = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleDropdown = () => {
         setDropdownOpen((prev) => !prev);
     };
 
     const handleLogout = () => {
-        // Implement logout functionality
+        // Clear any user authentication state or tokens here
         console.log("Logged out");
+        // Redirect to login page after logout
+        navigate('/login');
     };
 
     const handleProfileUpdate = () => {
@@ -19,8 +23,7 @@ const TopNav = () => {
     };
 
     return (
-        <div className="bg-white shadow-md ml-4 p-4 flex-end justify-between items-center">
-            
+        <div className="bg-white shadow-md p-4 flex justify-end items-center">
             <div className="relative">
                 <button onClick={toggleDropdown} className="focus:outline-none">
                     <FaUserCircle size={30} />
