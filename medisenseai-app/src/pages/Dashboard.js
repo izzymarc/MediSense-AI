@@ -12,7 +12,7 @@ import {
     ArcElement,
 } from 'chart.js';
 
-// Register the necessary chart components
+// Chart components
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -77,6 +77,7 @@ const Dashboard = () => {
 
     return (
         <div className="p-6 bg-gray-50 h-full">
+            <div className="text-xl font-bold my-4 text-cyan-800">Hello Ezekiel!</div>
             <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Popular Symptoms */}
                 <div className="bg-white shadow-lg rounded-lg p-4 text-center">
@@ -98,7 +99,7 @@ const Dashboard = () => {
             </div>
 
             {/* Symptom Tracker Pie Chart */}
-            <div className="flex items-center justify-center bg-white shadow-lg rounded p-6 mb-8" style={{ width: '90%', height: '550px' }}>
+            <div className="flex items-center justify-center bg-white shadow-lg rounded p-6 mb-8" style={{ width: '85%', height: '550px' }}>
                 <h3 className="text-2xl font-semibold text-cyan-700 mb-4">Symptom Tracker</h3>
                 <Pie ref={pieChartRef} data={pieChartData} options={{
                     responsive: true,

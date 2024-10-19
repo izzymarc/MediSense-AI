@@ -19,8 +19,8 @@ const TopNav = () => {
     };
 
     return (
-        <div className="bg-white shadow-md p-4 flex justify-between items-center">
-            <h3 className="text-3xl font-bold mb-4 text-cyan-800">Hello Ezekiel!</h3>
+        <div className="bg-white shadow-md ml-4 p-4 flex-end justify-between items-center">
+            
             <div className="relative">
                 <button onClick={toggleDropdown} className="focus:outline-none">
                     <FaUserCircle size={30} />
