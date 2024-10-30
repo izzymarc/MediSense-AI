@@ -190,7 +190,20 @@ def check_symptoms():
 @login_required
 def view_logs():
     logs = db.symptom_logs.find({'user_id': current_user.id})
-    return jsonify([{"symptoms": log['symptoms'], "advice": log['advice'], "date": log['date_logged']} for log in logs])
+    
+    # Adjust to include additional fields if available
+    return jsonify([
+        {
+            "symptoms": log.get('symptoms', []),
+            "advice": log.get('advice', "No advice available"),
+            "date": log['date_logged'].strftime('%Y-%m-%d'),  # Format the date
+            "possible_cause": log.get('possible_cause', "Unknown"),
+            "recommendation": log.get('recommendation', "None"),
+            "lifestyle_change": log.get('lifestyle_change', "None"),
+            "medication": log.get('medication', "None")
+        } 
+        for log in logs
+    ])
 
 if __name__ == "__main__":
     app.run(debug=True)

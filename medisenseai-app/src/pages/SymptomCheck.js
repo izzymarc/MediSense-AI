@@ -42,7 +42,13 @@ const SymptomCheck = () => {
                 {diagnosisResult && (
                     <div className="bg-cyan-100 text-cyan-800 p-4 mb-4 rounded-md shadow-inner">
                         <h3 className="font-semibold mb-2">Possible Diagnosis:</h3>
-                        <p>{diagnosisResult}</p>
+                        {diagnosisResult.split('.').map((sentence, index) => (
+                            sentence.trim() && (
+                                <p key={index} className="mb-2">
+                                    {sentence.trim() + '.'}
+                                </p>
+                            )
+                        ))}
                     </div>
                 )}
 

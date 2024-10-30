@@ -14,13 +14,20 @@ const Header = () => {
             </nav>
 
             {/* CTA Button */}
-            <div>
+            <div className="flex space-x-4">
+                <Link
+                    to="/login"
+                    className="bg-gray-600 text-white py-2 px-6 rounded-full font-bold shadow-md hover:bg-gray-500 transition"
+                >
+                    Log In
+                </Link>
                 <Link
                     to="/register"
                     className="bg-cyan-600 text-white py-2 px-6 rounded-full font-bold shadow-md hover:bg-cyan-500 transition"
                 >
                     Sign Up
                 </Link>
+                
             </div>
         </header>
     );
