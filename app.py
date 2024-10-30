@@ -191,7 +191,6 @@ def check_symptoms():
 def view_logs():
     logs = db.symptom_logs.find({'user_id': current_user.id})
     
-    # Adjust to include additional fields if available
     return jsonify([
         {
             "symptoms": log.get('symptoms', []),
@@ -204,6 +203,32 @@ def view_logs():
         } 
         for log in logs
     ])
+
+# Fetch user profile data
+@app.route('/profile', methods=['GET'])
+@login_required
+def get_profile():
+    user_data = {
+        "first_name": current_user.first_name,
+        "last_name": current_user.last_name,
+        "email": current_user.email,
+        "date_of_birth": current_user.date_of_birth,
+        "gender": current_user.gender,
+        "contact_number": current_user.contact_number,
+        "medical_history": current_user.medical_history,
+        "allergies": current_user.allergies,
+        "profile_image": current_user.profile_image 
+    }
+    return jsonify(user_data)
+
+# Update profile
+@app.route('/profile', methods=['PUT'])
+@login_required
+def update_profile():
+    data = request.json
+    
+    return jsonify({"message": "Profile updated successfully"})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

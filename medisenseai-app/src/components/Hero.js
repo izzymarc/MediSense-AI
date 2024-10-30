@@ -60,7 +60,7 @@ import Banner from '../images/human-body.webp';
 
 const Hero = () => {
     return (
-        <div className="bg-transparent px-4 md:px-8 lg:px-16 py-5">
+        <div className="bg-transparent px-4 md:px-8 lg:px-16 py-16">
             <main className="flex flex-col md:flex-row md:space-x-8 md:py-8">
                 
                 {/* Left Div */}
